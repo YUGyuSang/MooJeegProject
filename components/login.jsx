@@ -1,5 +1,6 @@
 //로그인 페이지
 import { useState } from 'react';
+import axios from 'axios';
 import {
     SafeAreaView,
     StyleSheet,
@@ -13,6 +14,28 @@ import {
 import { TextInput } from 'react-native-gesture-handler';
 
 function Login({navigation}){
+
+const serverUrl = 'https://port-0-door-lock-server-jvpb2alnwnfxkw.sel5.cloudtype.app'; // 서버 url
+
+    const handleLogin = () => {
+        console.log(idText,pwText);
+    // POST 요청에 보낼 데이터
+    const postData = {
+      userId: idText,
+      userPw: pwText,
+    };
+
+        // POST 요청 보내기
+        axios.post(`${serverUrl}/login`, postData)
+        .then(response => {
+          // 성공적으로 응답을 받았을 때 처리
+          console.log('서버 응답:', response.data);
+        })
+        .catch(error => {
+          // 오류가 발생했을 때 처리
+          console.error('오류:', error);
+        });
+    };
 
     const [idText, setIdText] = useState('');
     const [pwText, setPwText] = useState('');
@@ -48,7 +71,7 @@ function Login({navigation}){
                     />
                 </View>
                 <View style={styles.loginBtn}>
-                    <TouchableOpacity style={styles.btnLo}>
+                    <TouchableOpacity style={styles.btnLo} onPress={handleLogin} >
                         <Text style={styles.btnText}>로그인</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnLo} onPress={()=>navigation.navigate('join')}>
